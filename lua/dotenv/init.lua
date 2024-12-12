@@ -50,7 +50,7 @@ function M.setup(opts)
 	opts = opts or {}
 	local env_path = opts.env_path or ".env"
 	_G.env_vars = load_env(env_path)
-	vim.notify(".env file loaded from: " .. env_path, vim.log.levels.INFO)
+	vim.notify(".env file loaded from: " .. env_path .. "\n" .. vim.inspect(_G.env_vars), vim.log.levels.INFO)
 end
 
 function M.get_env_vars()

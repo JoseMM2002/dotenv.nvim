@@ -23,14 +23,31 @@ local function read_file(path)
 end
 
 local function parse_env(content)
-	local env_vars = {}
-	for line in content:gmatch("[^\r\n]+") do
-		local key, value = line:match("^(%w+)%s*=%s*(.+)$")
-		if key and value then
-			env_vars[key] = value
+	local values = vim.split(content, "\n")
+	local out = {}
+	for _, pair in pairs(values) do
+		pair = vim.trim(pair)
+		if not vim.startswith(pair, "#") and pair ~= "" then
+			local splitted = vim.split(pair, "=")
+			if #splitted > 1 then
+				local key = splitted[1]
+				local v = {}
+				for i = 2, #splitted, 1 do
+					local k = vim.trim(splitted[i])
+					if k ~= "" then
+						table.insert(v, splitted[i])
+					end
+				end
+				if #v > 0 then
+					local value = table.concat(v, "=")
+					value, _ = string.gsub(value, '"', "")
+					vim.env[key] = value
+					out[key] = value
+				end
+			end
 		end
 	end
-	return env_vars
+	return out
 end
 
 local function load_env(path)

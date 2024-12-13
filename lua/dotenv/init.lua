@@ -63,11 +63,20 @@ local function load_env(path)
 	return parse_env(content)
 end
 
+local function execute_reload(opts)
+	local env_path = opts.env_path or ".env"
+	_G.env_vars = load_env(env_path)
+	vim.notify("Env vars reloaded", vim.log.levels.INFO)
+end
+
 function M.setup(opts)
 	opts = opts or {}
 	local env_path = opts.env_path or ".env"
 	_G.env_vars = load_env(env_path)
-	vim.notify(".env file loaded from: " .. env_path .. "\n" .. vim.inspect(_G.env_vars), vim.log.levels.INFO)
+
+	vim.api.nvim_create_user_command("Env", function(opts)
+		execute_reload(opts)
+	end)
 end
 
 function M.get_env_vars()

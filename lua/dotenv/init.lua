@@ -83,4 +83,8 @@ function M.get_env_vars()
 	return _G.env_vars
 end
 
+function M.get_env_var(key)
+	return _G.env_vars[key]
+end
+
 return M

@@ -76,7 +76,7 @@ function M.setup(opts)
 
 	vim.api.nvim_create_user_command("Env", function(opts)
 		execute_reload(opts)
-	end, { narg = 1, complete = "file" })
+	end, { nargs = 1, complete = "file" })
 end
 
 function M.get_env_vars()
